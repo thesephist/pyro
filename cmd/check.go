@@ -9,8 +9,8 @@ import (
 )
 
 var checkCmd = &cobra.Command{
-	Use:   "check",
-	Short: "Pyro check",
+	Use:   "check <url> <status>",
+	Short: "Check a single route against an expected status code",
 	Long:  "Pyro long check",
 	Run: func(cmd *cobra.Command, args []string) {
 		url := ""

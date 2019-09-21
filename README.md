@@ -17,3 +17,6 @@ CLI and Go package to check if any of the routes in a list of critical routes of
 
 ## Go API
 
+## Todo items
+- [ ] Cookie authentication
+

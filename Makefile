@@ -2,12 +2,12 @@ CMD = ./pyro.go
 RUN = go run -race ${CMD}
 LDFLAGS = -ldflags="-s -w"
 
-all: run test install
+all: run run-test install
 
 run:
 	${RUN}; true # don't care about pyro's exit code
 
-test:
+run-test:
 	${RUN} test test/test.pyro
 
 # build for specific OS target

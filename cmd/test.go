@@ -71,9 +71,9 @@ func testFromSuite(suite pyro.Suite) {
 }
 
 var testCmd = &cobra.Command{
-	Use:   "test",
-	Short: "Pyro test",
-	Long:  "Pyro long test suite",
+	Use:   "test <specfile>",
+	Short: "Run a test suite specified by a spec file",
+	Long:  "Run a test suite",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 1 {
 			fmt.Println("error: invalid syntax for pyro test <file>")
