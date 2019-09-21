@@ -5,7 +5,6 @@ CLI and Go package to check if any of the routes in a list of critical routes of
 ## CLI
 
 - `pyro help`
-- `pyro ok <url>`
 - `pyro check <url> <status>`
 - `pyro test <suite file>`
 

@@ -2,18 +2,19 @@ package pyro
 
 import (
 	"io"
-	"os"
-	"strings"
+	_ "os"
+	_ "strings"
 )
 
 func parseRoute(r io.Reader) Route {
 	// things
 	return Route{
 		Url:    "url",
-		Status: "status",
+		Status: 200,
 	}
 }
 
 func ParseSuite(r io.Reader) Suite {
 	s := Suite{}
+	return s
 }

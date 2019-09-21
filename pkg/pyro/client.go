@@ -16,12 +16,15 @@ func (c Client) Log(msg string) {
 	fmt.Printf("%s\n", msg)
 }
 
-func (c Client) Ok(url string) bool {
-	return c.Check(url, 200)
-}
-
 func (c Client) Check(url string, status int) bool {
-	return c.Status(url) == status
+	respStatus := c.Status(url)
+	if respStatus == status {
+		fmt.Println(aurora.Green(fmt.Sprintf("pass [%d]", respStatus)))
+		return true
+	} else {
+		fmt.Println(aurora.Red(fmt.Sprintf("error [-> %d != %d]", respStatus, status)))
+		return false
+	}
 }
 
 func (c Client) Status(url string) int {
@@ -51,16 +54,16 @@ func (c Client) Status(url string) int {
 func (c Client) RunSuite(s Suite) bool {
 	failed := 0
 	for _, r := range s.Routes {
-		statusCode := c.Status(r.Url)
-		if statusCode == r.Status {
+		respStatus := c.Status(r.Url)
+		if respStatus == r.Status {
 			c.Log(aurora.Sprintf("%s\t%s",
-				aurora.Green(fmt.Sprintf("pass [%d]", r.Status)),
+				aurora.Green(fmt.Sprintf("pass [%d]", respStatus)),
 				r.Url,
 			))
 		} else {
-			if statusCode != -1 {
+			if respStatus != -1 {
 				c.Log(aurora.Sprintf("%s\t%s",
-					aurora.Red(fmt.Sprintf("error [%d]", r.Status)),
+					aurora.Red(fmt.Sprintf("error [%d]", respStatus)),
 					r.Url,
 				))
 			}

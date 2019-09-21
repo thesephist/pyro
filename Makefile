@@ -1,11 +1,14 @@
-CMD = ./cmd/pyro.go
+CMD = ./pyro.go
 RUN = go run -race ${CMD}
 LDFLAGS = -ldflags="-s -w"
 
 all: run test install
 
 run:
-	${RUN} 'https://google.com'; true # don't care about pyro's exit code
+	${RUN}; true # don't care about pyro's exit code
+
+test:
+	${RUN} test test/test.pyro
 
 # build for specific OS target
 build-%:
