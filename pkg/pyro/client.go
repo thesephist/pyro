@@ -4,15 +4,16 @@ import (
 	"fmt"
 	"net/http"
 	goUrl "net/url"
+
+	"github.com/logrusorgru/aurora"
 )
 
 type Client struct {
-	Name string
 	Http http.Client
 }
 
 func (c Client) Log(msg string) {
-	fmt.Printf("%s: %s\n", c.Name, msg)
+	fmt.Printf("%s\n", msg)
 }
 
 func (c Client) Ok(url string) bool {
@@ -20,31 +21,59 @@ func (c Client) Ok(url string) bool {
 }
 
 func (c Client) Check(url string, status int) bool {
+	return c.Status(url) == status
+}
+
+func (c Client) Status(url string) int {
 	resp, err := c.Http.Get(url)
 	if err != nil {
 		if urlErr, isUrlErr := err.(*goUrl.Error); isUrlErr {
 			if urlErr.Timeout() {
-				c.Log(fmt.Sprintf("timeout\t%s", url))
+				c.Log(aurora.Sprintf("%s\t%s",
+					aurora.Red("timeout"),
+					url,
+				))
 			} else {
-				c.Log(fmt.Sprintf("urlerr\t%s\n  - %s", url, urlErr.Error()))
+				c.Log(aurora.Sprintf("%s\t%s\n  - %s",
+					aurora.BgRed("url err"),
+					url,
+					urlErr.Error(),
+				))
 			}
 		}
-		return false
+		return -1
 	}
 
 	resp.Body.Close()
-	return resp.StatusCode == status
+	return resp.StatusCode
 }
 
 func (c Client) RunSuite(s Suite) bool {
-	allPassed := true
+	failed := 0
 	for _, r := range s.Routes {
-		if c.Check(r.Url, r.Status) {
-			c.Log(fmt.Sprintf("ok\t%s", r.Url))
+		statusCode := c.Status(r.Url)
+		if statusCode == r.Status {
+			c.Log(aurora.Sprintf("%s\t%s",
+				aurora.Green(fmt.Sprintf("pass [%d]", r.Status)),
+				r.Url,
+			))
 		} else {
-			allPassed = false
+			if statusCode != -1 {
+				c.Log(aurora.Sprintf("%s\t%s",
+					aurora.Red(fmt.Sprintf("error [%d]", r.Status)),
+					r.Url,
+				))
+			}
+
+			failed++
 		}
 	}
 
-	return allPassed
+	if failed == 0 {
+		fmt.Printf("\n%s\n", aurora.Green("All routes passed"))
+		return true
+	} else {
+		fmt.Printf("\n%s\n", aurora.Sprintf(aurora.Red("%d routes failed"), failed))
+		return false
+	}
 }

@@ -5,7 +5,7 @@ LDFLAGS = -ldflags="-s -w"
 all: run test install
 
 run:
-	${RUN} 'https://google.com'
+	${RUN} 'https://google.com'; true # don't care about pyro's exit code
 
 # build for specific OS target
 build-%:
