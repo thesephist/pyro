@@ -35,7 +35,7 @@ func (c Client) Status(url string) int {
 				))
 			} else {
 				c.Log(aurora.Sprintf("%s\t%s\n  - %s",
-					aurora.BgRed("url err"),
+					aurora.BgRed("url error"),
 					url,
 					urlErr.Error(),
 				))
@@ -70,10 +70,10 @@ func (c Client) RunSuite(s Suite) bool {
 	}
 
 	if failed == 0 {
-		fmt.Printf("\n%s\n", aurora.Green("All routes passed"))
+		fmt.Printf("\n%s\n", aurora.Green("All routes passed!"))
 		return true
 	} else {
-		fmt.Printf("\n%s\n", aurora.Sprintf(aurora.Red("%d routes failed"), failed))
+		fmt.Printf("\n%s\n", aurora.Sprintf(aurora.Red("%d routes failed."), failed))
 		return false
 	}
 }
