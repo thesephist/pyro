@@ -11,7 +11,10 @@ import (
 var checkCmd = &cobra.Command{
 	Use:   "check <url> <status>",
 	Short: "Check a single route against an expected status code",
-	Long:  "Pyro long check",
+	Long: `pyro check confirms that a given URL returns a valid HTTP
+response, and that the response status code matches the
+expected status code. If one is not provided, a status code
+of OK 200 is assumed.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		url := ""
 		status := 200

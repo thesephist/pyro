@@ -73,7 +73,11 @@ func testFromSuite(suite pyro.Suite) {
 var testCmd = &cobra.Command{
 	Use:   "test <specfile>",
 	Short: "Run a test suite specified by a spec file",
-	Long:  "Run a test suite",
+	Long: `pyro test runs a test suite of checks, specified
+by a .pyro test specfile. The specfile is a simple text file
+containing a line for each check of the format <route>
+<status>. Blank lines are ignored. Pyro will exit cleanly
+only if all routes return their expected status code.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 1 {
 			fmt.Println("error: invalid syntax for pyro test <file>")
@@ -83,7 +87,7 @@ var testCmd = &cobra.Command{
 		specFile, err := os.Open(args[0])
 		defer specFile.Close()
 		if err != nil {
-			fmt.Printf("error: could not read test spec file %s\n", args[0])
+			fmt.Printf("error: could not open test spec file %s\n", args[0])
 			return
 		}
 
